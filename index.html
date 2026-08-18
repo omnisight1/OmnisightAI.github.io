@@ -3,948 +3,991 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OmnisightAI — The Trust Layer for the AI Economy</title>
-  <meta name="description" content="OmnisightAI is the world's first decentralized AI bias auditing and compliance platform. Built on Ethereum. Patent Pending." />
+  <title>OmnisightAI — Independent Verification for AI Systems</title>
+  <meta name="description" content="OmnisightAI is building the independent verification layer for AI accountability. Decentralized. Tamper-evident. Governed by an independent expert council." />
+
+  <meta property="og:title" content="OmnisightAI — Independent Verification for AI Systems" />
+  <meta property="og:description" content="AI adoption is at 88%. Independent verification is at nearly zero. We are building the layer that closes that gap." />
+  <meta property="og:type" content="website" />
+  <meta name="robots" content="index, follow" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <!--
+    Type system — three faces, each with a job:
+      Newsreader (serif)     -> headlines. Reads institutional/editorial, not startup.
+      Inter (sans)           -> body copy. Neutral, highly legible.
+      JetBrains Mono (mono)  -> labels, data, status. Reads like an audit document.
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
     :root {
-      --navy:   #0A1628;
-      --blue:   #1A3E6E;
-      --accent: #00A8E8;
-      --gold:   #F0B429;
-      --green:  #00C48C;
-      --white:  #FFFFFF;
-      --offwhite: #F4F8FF;
-      --gray:   #8896A8;
-      --card:   #111D2E;
-      --border: rgba(0,168,232,0.15);
+      /* ── PALETTE ──────────────────────────────────────────────
+         Deliberate move away from dark-navy + cyan glow.
+         That palette reads "crypto project" to a compliance officer,
+         which is the exact wrong signal for a trust brand.
+         This reads: audit firm, standards body, research institute.
+      ────────────────────────────────────────────────────────── */
+      --paper:      #FAF9F7;   /* warm off-white page */
+      --paper-alt:  #F2F0EC;   /* banded sections */
+      --ink:        #101A28;   /* near-black navy — primary text */
+      --ink-soft:   #55606E;   /* secondary text */
+      --ink-faint:  #8A929C;   /* captions, footnotes */
+      --rule:       #E3E0DA;   /* hairlines */
+      --rule-dark:  #C9C5BD;
+      --accent:     #14503C;   /* deep verification green — the one accent */
+      --accent-lt:  #E8EFEA;
+      --pending:    #8A6A1F;   /* muted ochre for in-progress states */
+      --pending-lt: #F5EFE0;
+
+      --maxw: 1140px;
     }
- 
-    html { scroll-behavior: smooth; overflow-x: hidden; }
- 
+
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--navy);
-      color: var(--white);
-      overflow-x: hidden;
-      max-width: 100vw;
-    }
- 
-    /* ── NOISE TEXTURE OVERLAY ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-    }
- 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.25rem 4rem;
-      background: rgba(10,22,40,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
- 
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.25rem;
-      color: var(--white);
-      text-decoration: none;
-      letter-spacing: -0.02em;
-    }
- 
-    .nav-logo span { color: var(--accent); }
- 
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
- 
-    .nav-links a {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--gray);
-      text-decoration: none;
-      letter-spacing: 0.02em;
-      transition: color 0.2s;
-    }
- 
-    .nav-links a:hover { color: var(--white); }
- 
-    .nav-cta {
-      background: var(--accent);
-      color: var(--navy) !important;
-      padding: 0.5rem 1.25rem;
-      border-radius: 4px;
-      font-weight: 600 !important;
-      transition: background 0.2s, transform 0.2s !important;
-    }
- 
-    .nav-cta:hover {
-      background: #00C4FF !important;
-      transform: translateY(-1px);
-      color: var(--navy) !important;
-    }
- 
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 8rem 2rem 5rem;
-      position: relative;
-      overflow: hidden;
-    }
- 
-    .hero-glow {
-      position: absolute;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 800px;
-      background: radial-gradient(ellipse, rgba(0,168,232,0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
- 
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,168,232,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,168,232,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 0%, transparent 100%);
-    }
- 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(0,168,232,0.1);
-      border: 1px solid rgba(0,168,232,0.3);
-      border-radius: 100px;
-      padding: 0.4rem 1rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--accent);
-      letter-spacing: 0.04em;
-      margin-bottom: 2rem;
-      animation: fadeUp 0.8s ease both;
-    }
- 
-    .badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 6px var(--green);
-      animation: pulse 2s infinite;
-    }
- 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
- 
-    .hero h1 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(2.8rem, 6vw, 5.5rem);
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      max-width: 900px;
-      animation: fadeUp 0.8s ease 0.1s both;
-    }
- 
-    .hero h1 .accent { color: var(--accent); }
-    .hero h1 .gold { color: var(--gold); }
- 
-    .hero-sub {
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      font-weight: 300;
-      color: rgba(255,255,255,0.65);
-      max-width: 600px;
-      line-height: 1.7;
-      margin-top: 1.5rem;
-      animation: fadeUp 0.8s ease 0.2s both;
-    }
- 
-    .hero-badges {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 2.5rem;
-      animation: fadeUp 0.8s ease 0.3s both;
-    }
- 
-    .stat-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 6px;
-      padding: 0.5rem 1rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: rgba(255,255,255,0.7);
-    }
- 
-    .stat-badge .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-    }
- 
-    .hero-cta {
-      display: flex;
-      gap: 1rem;
-      margin-top: 3rem;
-      animation: fadeUp 0.8s ease 0.4s both;
-    }
- 
-    .btn-primary {
-      background: var(--accent);
-      color: var(--navy);
-      padding: 0.875rem 2rem;
-      border-radius: 6px;
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-decoration: none;
-      transition: all 0.2s;
-      letter-spacing: 0.01em;
-    }
- 
-    .btn-primary:hover {
-      background: #00C4FF;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0,168,232,0.35);
-    }
- 
-    .btn-secondary {
-      background: transparent;
-      color: var(--white);
-      padding: 0.875rem 2rem;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.15);
-      font-family: 'Syne', sans-serif;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
- 
-    .btn-secondary:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
- 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
- 
-    /* ── STATS BAR ── */
-    .stats-bar {
-      background: rgba(255,255,255,0.02);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 2rem 4rem;
-      display: flex;
-      justify-content: center;
-      gap: 5rem;
-      flex-wrap: wrap;
-    }
- 
-    .stat-item {
-      text-align: center;
-    }
- 
-    .stat-num {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 2rem;
-      color: var(--accent);
-      line-height: 1;
-    }
- 
-    .stat-label {
-      font-size: 0.8rem;
-      color: var(--gray);
-      margin-top: 0.35rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
- 
-    /* ── SECTIONS ── */
-    section {
-      padding: 6rem 4rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-    }
- 
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
-    }
- 
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(1.8rem, 3.5vw, 2.75rem);
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      max-width: 700px;
-    }
- 
-    .section-body {
-      font-size: 1.05rem;
-      font-weight: 300;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.8;
-      max-width: 650px;
-      margin-top: 1.25rem;
-    }
- 
-    /* ── PROBLEM ── */
-    .problem-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
- 
-    .problem-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 2rem;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s, transform 0.3s;
-    }
- 
-    .problem-card:hover {
-      border-color: rgba(0,168,232,0.4);
-      transform: translateY(-4px);
-    }
- 
-    .problem-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), transparent);
-    }
- 
-    .problem-icon {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-    }
- 
-    .problem-card h3 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 0.75rem;
-      color: var(--white);
-    }
- 
-    .problem-card p {
-      font-size: 0.9rem;
-      color: rgba(255,255,255,0.55);
-      line-height: 1.7;
-    }
- 
-    /* ── HOW IT WORKS ── */
-    .how-section {
-      background: rgba(255,255,255,0.02);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 6rem 0;
-    }
- 
-    .how-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 4rem;
-    }
- 
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin-top: 3rem;
-      position: relative;
-    }
- 
-    .steps::before {
-      content: '';
-      position: absolute;
-      top: 2rem;
-      left: 2.5rem;
-      right: 2.5rem;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent), var(--accent), transparent);
-      opacity: 0.2;
-    }
- 
-    .step {
-      text-align: center;
-      padding: 2rem 1rem;
-      position: relative;
-    }
- 
-    .step-num {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: var(--navy);
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.25rem;
-      box-shadow: 0 0 20px rgba(0,168,232,0.3);
-    }
- 
-    .step h3 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-    }
- 
-    .step p {
-      font-size: 0.875rem;
-      color: rgba(255,255,255,0.5);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 16px;
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
- 
-    /* ── COUNCIL ── */
-    .council-card {
-      background: linear-gradient(135deg, var(--card) 0%, rgba(0,62,110,0.3) 100%);
-      border: 1px solid rgba(0,168,232,0.2);
-      border-radius: 16px;
-      padding: 3rem;
-      margin-top: 3rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-    }
- 
-    .council-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.75rem;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-    }
- 
-    .council-title span { color: var(--accent); }
- 
-    .council-body {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.8;
-      margin-top: 1rem;
-    }
- 
-    .council-seats {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
- 
-    .seat {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 8px;
-      padding: 0.875rem 1.25rem;
-    }
- 
-    .seat-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: rgba(0,168,232,0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
- 
-    .seat-name {
-      font-family: 'Syne', sans-serif;
-      font-weight: 600;
-      font-size: 0.875rem;
-    }
- 
-    .seat-status {
-      margin-left: auto;
-      font-size: 0.75rem;
+
+    /* ── SHARED TYPE UTILITIES ── */
+    .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6875rem;
       font-weight: 500;
-      padding: 0.2rem 0.6rem;
-      border-radius: 100px;
-    }
- 
-    .seat-status.filled {
-      background: rgba(0,196,140,0.15);
-      color: var(--green);
-      border: 1px solid rgba(0,196,140,0.2);
-    }
- 
-    .seat-status.recruiting {
-      background: rgba(240,180,41,0.1);
-      color: var(--gold);
-      border: 1px solid rgba(240,180,41,0.2);
-    }
- 
-    /* ── WHY NOW ── */
-    .why-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
- 
-    .why-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 2rem;
-      transition: border-color 0.3s;
-    }
- 
-    .why-card:hover { border-color: rgba(0,168,232,0.3); }
- 
-    .why-card h3 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 0.75rem;
     }
- 
-    .why-card p {
-      font-size: 0.9rem;
-      color: rgba(255,255,255,0.55);
-      line-height: 1.7;
+
+    h1, h2, h3 { font-family: 'Newsreader', Georgia, serif; font-weight: 500; letter-spacing: -0.015em; }
+
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 2.5rem; }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,249,247,0.92);
+      backdrop-filter: saturate(180%) blur(10px);
+      border-bottom: 1px solid var(--rule);
     }
- 
-    /* ── CONTACT ── */
-    .contact-section {
-      text-align: center;
-      padding: 7rem 2rem;
-      position: relative;
+    .nav-inner {
+      max-width: var(--maxw); margin: 0 auto; padding: 0 2.5rem;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
     }
- 
-    .contact-glow {
-      position: absolute;
-      bottom: 0; left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 400px;
-      background: radial-gradient(ellipse, rgba(0,168,232,0.1) 0%, transparent 70%);
-      pointer-events: none;
+    .brand { display: flex; align-items: center; gap: 0.625rem; text-decoration: none; color: var(--ink); }
+    .brand svg { display: block; }
+    .brand-name {
+      font-family: 'Newsreader', serif; font-size: 1.1875rem; font-weight: 600; letter-spacing: -0.02em;
     }
- 
-    .contact-section .section-title {
-      margin: 0 auto;
-      text-align: center;
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.8125rem; font-weight: 500; color: var(--ink-soft);
+      text-decoration: none; transition: color 0.15s;
     }
- 
-    .contact-section .section-body {
-      margin: 1.25rem auto 0;
-      text-align: center;
+    .nav-links a:hover { color: var(--ink); }
+    .nav-btn {
+      border: 1px solid var(--ink); color: var(--ink) !important;
+      padding: 0.4375rem 1rem; border-radius: 2px; transition: all 0.15s !important;
     }
- 
-    .contact-options {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 2.5rem;
+    .nav-btn:hover { background: var(--ink); color: var(--paper) !important; }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    .hero { padding: 7rem 0 4.5rem; border-bottom: 1px solid var(--rule); }
+    .hero-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 5rem; align-items: start; }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 3.875rem);
+      line-height: 1.08; letter-spacing: -0.025em; margin-top: 1.5rem;
     }
- 
+    .hero h1 em { font-style: italic; color: var(--accent); }
+
+    .hero-sub {
+      font-size: 1.125rem; color: var(--ink-soft); line-height: 1.65;
+      margin-top: 1.75rem; max-width: 34rem;
+    }
+
+    .hero-cta { display: flex; gap: 0.75rem; margin-top: 2.5rem; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-block; padding: 0.8125rem 1.5rem; border-radius: 2px;
+      font-size: 0.875rem; font-weight: 500; text-decoration: none;
+      transition: all 0.15s; border: 1px solid transparent; cursor: pointer;
+    }
+    .btn-solid { background: var(--ink); color: var(--paper); }
+    .btn-solid:hover { background: var(--accent); }
+    .btn-ghost { border-color: var(--rule-dark); color: var(--ink); }
+    .btn-ghost:hover { border-color: var(--ink); background: rgba(16,26,40,0.03); }
+
+    /* Status panel — honesty as a trust asset.
+       Telling a council prospect exactly where the company stands
+       reads as competence. Overstating reads as risk. */
+    .status-panel {
+      border: 1px solid var(--rule); background: #fff; border-radius: 3px; padding: 1.5rem 1.625rem;
+    }
+    .status-panel h4 {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.6875rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint);
+      padding-bottom: 0.875rem; border-bottom: 1px solid var(--rule); margin-bottom: 0.25rem;
+    }
+    .status-row {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+      padding: 0.8125rem 0; border-bottom: 1px solid var(--rule);
+    }
+    .status-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .status-k { font-size: 0.8125rem; color: var(--ink-soft); }
+    .status-v {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.6875rem; font-weight: 500;
+      letter-spacing: 0.04em; padding: 0.1875rem 0.5rem; border-radius: 2px; white-space: nowrap;
+    }
+    .v-done    { background: var(--accent-lt);  color: var(--accent); }
+    .v-active  { background: var(--pending-lt);  color: var(--pending); }
+    .v-queued  { background: #EFEDE9; color: var(--ink-faint); }
+
+    /* ── SECTION SCAFFOLD ── */
+    section { padding: 5.5rem 0; }
+    .band { background: var(--paper-alt); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+
+    .sec-head { max-width: 44rem; }
+    .sec-head h2 {
+      font-size: clamp(1.875rem, 3.4vw, 2.625rem); line-height: 1.14; margin-top: 0.875rem;
+    }
+    .sec-head p { font-size: 1.0625rem; color: var(--ink-soft); margin-top: 1.125rem; line-height: 1.7; }
+
+    /* ── THE GAP: DATA FIGURES ── */
+    .figures {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--rule-dark); margin-top: 3.5rem;
+    }
+    .fig { padding: 1.75rem 1.5rem 1.75rem 0; border-right: 1px solid var(--rule); }
+    .fig:last-child { border-right: none; }
+    .fig:not(:first-child) { padding-left: 1.5rem; }
+    .fig-num {
+      font-family: 'Newsreader', serif; font-size: 2.875rem; font-weight: 500;
+      line-height: 1; letter-spacing: -0.03em; color: var(--ink);
+    }
+    .fig-num small { font-size: 1.5rem; color: var(--ink-faint); }
+    .fig-desc { font-size: 0.875rem; color: var(--ink-soft); margin-top: 0.875rem; line-height: 1.55; }
+    .fig-src {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.625rem; letter-spacing: 0.05em;
+      color: var(--ink-faint); margin-top: 0.75rem; text-transform: uppercase;
+    }
+
+    /* Pull-quote / evidence callout — the single most persuasive fact on the page */
+    .evidence {
+      margin-top: 4rem; border-left: 2px solid var(--accent);
+      padding: 0.25rem 0 0.25rem 2rem; max-width: 46rem;
+    }
+    .evidence p {
+      font-family: 'Newsreader', serif; font-size: 1.375rem; line-height: 1.5; color: var(--ink);
+    }
+    .evidence cite {
+      display: block; font-family: 'JetBrains Mono', monospace; font-style: normal;
+      font-size: 0.6875rem; letter-spacing: 0.06em; color: var(--ink-faint);
+      margin-top: 1rem; text-transform: uppercase;
+    }
+
+    /* ── GUARANTEES (replaces the old "How It Works" process diagram) ──
+       Deliberate IP decision: this section states PROPERTIES of the
+       standard, not the MECHANISM that produces them. Mechanism is
+       covered by the provisional filing and stays off the public page. */
+    .guarantees { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 3.5rem; border-top: 1px solid var(--rule-dark); }
+    .g-item { padding: 2.25rem 2.5rem 2.25rem 0; border-bottom: 1px solid var(--rule); }
+    .g-item:nth-child(even) { padding-left: 2.5rem; border-left: 1px solid var(--rule); }
+    .g-item:nth-last-child(-n+2) { border-bottom: none; }
+    .g-ico { color: var(--accent); margin-bottom: 1.125rem; display: block; }
+    .g-item h3 { font-size: 1.25rem; margin-bottom: 0.625rem; }
+    .g-item p { font-size: 0.9375rem; color: var(--ink-soft); line-height: 1.68; }
+
+    .nda-note {
+      margin-top: 2.5rem; padding: 1.125rem 1.375rem; background: #fff;
+      border: 1px solid var(--rule); border-radius: 3px;
+      font-size: 0.875rem; color: var(--ink-soft); display: flex; gap: 0.875rem; align-items: flex-start;
+    }
+    .nda-note svg { flex-shrink: 0; color: var(--ink-faint); margin-top: 2px; }
+    .nda-note a { color: var(--accent); font-weight: 500; }
+
+    /* ── REGULATORY TABLE ── */
+    .reg-table { width: 100%; border-collapse: collapse; margin-top: 3rem; font-size: 0.9375rem; }
+    .reg-table thead th {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.625rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint);
+      text-align: left; padding: 0 1rem 0.875rem 0; border-bottom: 1px solid var(--rule-dark);
+    }
+    .reg-table tbody td { padding: 1.125rem 1rem 1.125rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    .reg-table tbody tr:last-child td { border-bottom: none; }
+    .reg-juris { font-weight: 600; white-space: nowrap; width: 1%; }
+    .reg-req { color: var(--ink-soft); line-height: 1.55; }
+    .reg-when { white-space: nowrap; width: 1%; }
+    .pill {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.625rem; font-weight: 500;
+      letter-spacing: 0.05em; padding: 0.25rem 0.5rem; border-radius: 2px; text-transform: uppercase;
+    }
+    .pill-live { background: var(--accent-lt); color: var(--accent); }
+    .pill-soon { background: var(--pending-lt); color: var(--pending); }
+
+    /* ── COUNCIL ── */
+    .council-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: 4.5rem; align-items: start; margin-top: 3rem; }
+    .seats { border-top: 1px solid var(--rule-dark); }
+    .seat {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.125rem 0; border-bottom: 1px solid var(--rule);
+    }
+    .seat-name { font-size: 0.9375rem; font-weight: 500; }
+    .seat-note { font-size: 0.8125rem; color: var(--ink-faint); margin-top: 0.1875rem; }
+    .seat-status { margin-left: auto; }
+    .seat.open { background: linear-gradient(90deg, var(--pending-lt), transparent 65%); padding-left: 0.875rem; margin-left: -0.875rem; }
+
+    /* ── CONTACT: real form + always-visible direct address ──
+       Design rule: never make a mailto link the ONLY path to contact you.
+       mailto does nothing for anyone reading in an embedded preview, or
+       using webmail with no desktop client registered. The address is
+       therefore printed as selectable text and backed by a copy button. */
+    .contact-cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 4rem; margin-top: 3rem; align-items: start; }
+
+    .field { margin-bottom: 1.125rem; }
+    .field label {
+      display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.625rem;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.4375rem;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%; font-family: 'Inter', sans-serif; font-size: 0.9375rem; color: var(--ink);
+      background: #fff; border: 1px solid var(--rule-dark); border-radius: 2px;
+      padding: 0.6875rem 0.8125rem; transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field textarea { resize: vertical; min-height: 118px; line-height: 1.55; }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(20,80,60,0.08);
+    }
+    .form-note { font-size: 0.75rem; color: var(--ink-faint); margin-top: 0.9375rem; line-height: 1.55; }
+    .form-msg {
+      display: none; margin-top: 1.125rem; padding: 0.9375rem 1.0625rem; border-radius: 2px;
+      font-size: 0.875rem; line-height: 1.6;
+      background: var(--accent-lt); color: var(--accent); border: 1px solid rgba(20,80,60,0.22);
+    }
+    .form-msg.show { display: block; }
+    .form-msg a { color: inherit; font-weight: 600; }
+
+    .direct { border: 1px solid var(--rule); background: #fff; border-radius: 3px; padding: 1.5rem 1.625rem; }
+    .direct h4 {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.625rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--ink-faint); font-weight: 500; margin-bottom: 0.875rem;
+    }
+    .email-row { display: flex; align-items: center; gap: 0.625rem; flex-wrap: wrap; }
+    .email-addr {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9375rem; color: var(--ink);
+      text-decoration: none; border-bottom: 1px solid var(--rule-dark); word-break: break-all;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .email-addr:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.625rem; letter-spacing: 0.08em;
+      text-transform: uppercase; background: transparent; border: 1px solid var(--rule-dark);
+      color: var(--ink-soft); padding: 0.3125rem 0.625rem; border-radius: 2px;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .copy-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .copy-btn.done { background: var(--accent-lt); border-color: var(--accent); color: var(--accent); }
+
+    .routes { margin-top: 1.5rem; padding-top: 1.375rem; border-top: 1px solid var(--rule); }
+    .route { padding: 0.8125rem 0; border-bottom: 1px solid var(--rule); }
+    .route:last-child { border-bottom: none; padding-bottom: 0; }
+    .route strong { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.1875rem; }
+    .route span { font-size: 0.8125rem; color: var(--ink-soft); line-height: 1.5; }
+
     /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 4rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
+    footer { border-top: 1px solid var(--rule); padding: 3rem 0 2.5rem; }
+    .foot-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3rem; flex-wrap: wrap; }
+    .foot-legal { font-size: 0.8125rem; color: var(--ink-soft); max-width: 30rem; line-height: 1.65; }
+    .foot-links { display: flex; gap: 1.75rem; }
+    .foot-links a { font-size: 0.8125rem; color: var(--ink-soft); text-decoration: none; }
+    .foot-links a:hover { color: var(--ink); }
+    .sources {
+      margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--rule);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.625rem; line-height: 1.9;
+      color: var(--ink-faint); letter-spacing: 0.02em;
     }
- 
-    .footer-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1rem;
-      color: var(--white);
+    .sources strong { color: var(--ink-soft); font-weight: 500; display: block; margin-bottom: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* ── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 940px) {
+      .wrap, .nav-inner { padding: 0 1.5rem; }
+      .nav-links li:not(:last-child) { display: none; }
+      .hero { padding: 4rem 0 3.5rem; }
+      .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .fig { padding: 1.5rem 1.25rem 1.5rem 0; border-bottom: 1px solid var(--rule); }
+      .fig:nth-child(2) { border-right: none; }
+      .fig:nth-child(odd) { padding-left: 0; }
+      .fig:nth-child(even) { padding-left: 1.25rem; }
+      .fig:nth-last-child(-n+2) { border-bottom: none; }
+      .guarantees { grid-template-columns: 1fr; }
+      .g-item, .g-item:nth-child(even) { padding: 2rem 0; border-left: none; }
+      .g-item:nth-last-child(2) { border-bottom: 1px solid var(--rule); }
+      .council-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .contact-cols { grid-template-columns: 1fr; gap: 2.5rem; }
     }
- 
-    .footer-logo span { color: var(--accent); }
- 
-    .footer-meta {
-      font-size: 0.8rem;
-      color: var(--gray);
-      text-align: center;
-    }
- 
-    .footer-links {
-      display: flex;
-      gap: 1.5rem;
-    }
- 
-    .footer-links a {
-      font-size: 0.8rem;
-      color: var(--gray);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
- 
-    .footer-links a:hover { color: var(--accent); }
- 
-    /* ── DIVIDER ── */
-    .full-divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 0;
-    }
- 
-    /* ── RESPONSIVE — TABLET ── */
-    @media (max-width: 900px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
-      section { padding: 4rem 1.5rem; }
-      .stats-bar { padding: 2rem 1.5rem; gap: 2rem; }
-      .problem-grid { grid-template-columns: 1fr; }
-      .steps { grid-template-columns: repeat(2, 1fr); }
-      .steps::before { display: none; }
-      .council-card { grid-template-columns: 1fr; gap: 2rem; }
-      .why-grid { grid-template-columns: 1fr; }
-      footer { flex-direction: column; text-align: center; }
-      .how-inner { padding: 0 1.5rem; }
-      .hero-cta { flex-direction: column; align-items: center; }
-      .btn-primary, .btn-secondary { width: 100%; max-width: 320px; text-align: center; }
-    }
- 
-    /* ── RESPONSIVE — MOBILE ── */
+
     @media (max-width: 600px) {
-      nav { padding: 0.875rem 1.25rem; }
-      .nav-logo { font-size: 1.1rem; }
-      .hero { padding: 7rem 1.25rem 4rem; min-height: auto; }
-      .hero h1 { font-size: 2.4rem; line-height: 1.08; }
-      .hero-sub { font-size: 0.95rem; margin-top: 1.25rem; }
-      .hero-badges { flex-direction: column; align-items: center; gap: 0.6rem; margin-top: 1.75rem; }
-      .stat-badge { font-size: 0.75rem; padding: 0.4rem 0.875rem; }
-      .hero-cta { margin-top: 2rem; width: 100%; }
-      .btn-primary, .btn-secondary { width: 100%; max-width: 100%; padding: 1rem 1.5rem; font-size: 0.95rem; text-align: center; display: block; }
-      .badge { font-size: 0.72rem; padding: 0.35rem 0.875rem; }
-      .stats-bar { padding: 2rem 1.25rem; gap: 1.5rem; display: grid; grid-template-columns: repeat(2, 1fr); }
-      .stat-num { font-size: 1.6rem; }
-      .stat-label { font-size: 0.7rem; }
-      section { padding: 3.5rem 1.25rem; }
-      .section-title { font-size: 1.6rem; line-height: 1.15; }
-      .section-body { font-size: 0.95rem; }
-      .problem-grid { grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem; }
-      .problem-card { padding: 1.5rem; }
-      .how-section { padding: 4rem 0; }
-      .how-inner { padding: 0 1.25rem; }
-      .steps { grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem; }
-      .step { padding: 1.5rem 1rem; }
-      .council-card { padding: 1.75rem; gap: 1.5rem; margin-top: 2rem; }
-      .council-title { font-size: 1.4rem; }
-      .seat { padding: 0.75rem 1rem; }
-      .seat-name { font-size: 0.8rem; }
-      .seat-status { font-size: 0.68rem; padding: 0.15rem 0.5rem; }
-      .why-grid { gap: 1rem; margin-top: 2rem; }
-      .why-card { padding: 1.5rem; }
-      .contact-section { padding: 4rem 1.25rem; }
-      .contact-options { flex-direction: column; align-items: center; gap: 0.75rem; margin-top: 2rem; }
-      .contact-options .btn-primary, .contact-options .btn-secondary { width: 100%; max-width: 100%; }
-      footer { padding: 2rem 1.25rem; gap: 1.25rem; }
-      .footer-links { justify-content: center; }
+      section { padding: 3.5rem 0; }
+      .hero h1 { font-size: 2.125rem; }
+      .hero-sub { font-size: 1rem; }
+      .hero-cta { flex-direction: column; }
+      .btn { text-align: center; }
+      .figures { grid-template-columns: 1fr; }
+      .fig, .fig:nth-child(even) { padding: 1.5rem 0; border-right: none; border-bottom: 1px solid var(--rule); }
+      .fig:last-child { border-bottom: none; }
+      .fig-num { font-size: 2.5rem; }
+      .evidence { padding-left: 1.25rem; margin-top: 2.5rem; }
+      .evidence p { font-size: 1.125rem; }
+      /* Regulatory table collapses to stacked cards on phones */
+      .reg-table thead { display: none; }
+      .reg-table, .reg-table tbody, .reg-table tr, .reg-table td { display: block; width: 100%; }
+      .reg-table tr { padding: 1.25rem 0; border-bottom: 1px solid var(--rule); }
+      .reg-table tbody td { border: none; padding: 0 0 0.5rem 0; }
+      .reg-juris { width: auto; }
+      .foot-top { flex-direction: column; gap: 1.5rem; }
+      .foot-links { flex-wrap: wrap; gap: 1.25rem; }
     }
   </style>
 </head>
 <body>
- 
-  <!-- NAV -->
+
+  <!-- ══ NAV ══ -->
   <nav>
-    <a href="#" class="nav-logo">Omnisight<span>AI</span></a>
-    <ul class="nav-links">
-      <li><a href="#problem">The Problem</a></li>
-      <li><a href="#solution">The Solution</a></li>
-      <li><a href="#council">DAIEC Council</a></li>
-      <li><a href="#contact" class="nav-cta">Get In Touch</a></li>
-    </ul>
+    <div class="nav-inner">
+      <a href="#top" class="brand">
+        <!-- Logomark: an aperture/seal. Geometric, no gradients — reads institutional. -->
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <circle cx="13" cy="13" r="12" stroke="#101A28" stroke-width="1.5"/>
+          <circle cx="13" cy="13" r="4.25" fill="#14503C"/>
+          <path d="M13 1v6M13 19v6M1 13h6M19 13h6" stroke="#101A28" stroke-width="1.5"/>
+        </svg>
+        <span class="brand-name">OmnisightAI</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#gap">The Gap</a></li>
+        <li><a href="#standard">The Standard</a></li>
+        <li><a href="#landscape">Landscape</a></li>
+        <li><a href="#council">Council</a></li>
+        <li><a href="#contact" class="nav-btn">Contact</a></li>
+      </ul>
+    </div>
   </nav>
- 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-glow"></div>
-    <div class="hero-grid"></div>
- 
-    <div class="badge">
-      <span class="badge-dot"></span>
-      Live on Ethereum Blockchain &nbsp;·&nbsp; Patent Pending
-    </div>
- 
-    <h1>
-      Making AI<br/>
-      <span class="accent">Accountable</span><br/>
-      to <span class="gold">Everyone.</span>
-    </h1>
- 
-    <p class="hero-sub">
-      OmnisightAI is the world's first decentralized AI bias auditing and compliance platform — built on Ethereum, governed by independent experts, and impossible to manipulate.
-    </p>
- 
-    <div class="hero-badges">
-      <div class="stat-badge"><span class="dot" style="background:var(--green)"></span> OmnisightAI LLC — Legally Formed</div>
-      <div class="stat-badge"><span class="dot" style="background:var(--gold)"></span> USPTO Patent Pending</div>
-      <div class="stat-badge"><span class="dot" style="background:var(--accent)"></span> Smart Contracts Deployed on Ethereum</div>
-    </div>
- 
-    <div class="hero-cta">
-      <a href="#contact" class="btn-primary">Get In Touch</a>
-      <a href="#solution" class="btn-secondary">How It Works</a>
-    </div>
-  </section>
- 
-  <!-- STATS BAR -->
-  <div class="stats-bar">
-    <div class="stat-item">
-      <div class="stat-num">$206B</div>
-      <div class="stat-label">Spent on compliance globally in 2024</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">88%</div>
-      <div class="stat-label">Of orgs have zero AI accountability standard</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">$105B</div>
-      <div class="stat-label">RegTech market by 2034</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">42%</div>
-      <div class="stat-label">Error rate in leading AI benchmarks</div>
-    </div>
-  </div>
- 
-  <!-- PROBLEM -->
-  <section id="problem">
-    <div class="section-label">The Crisis</div>
-    <h2 class="section-title">AI Is Making Life-Changing Decisions — With No Accountability</h2>
-    <p class="section-body">
-      Algorithms decide who gets hired, who receives a loan, who gets healthcare, and who goes to prison. Yet almost no independent system exists to verify whether those decisions are fair.
-    </p>
- 
-    <div class="problem-grid">
-      <div class="problem-card">
-        <div class="problem-icon">⚖️</div>
-        <h3>Biased AI is Everywhere</h3>
-        <p>From hiring tools that penalize women's organizations to criminal justice algorithms that flag Black defendants at twice the rate — AI bias is documented, systemic, and scaling.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-icon">🔒</div>
-        <h3>No Enforcement Exists</h3>
-        <p>Current compliance frameworks are voluntary, unenforceable, and impossible to verify publicly. Companies self-report with no independent oversight and no permanent record.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-icon">🌍</div>
-        <h3>Regulators Are Behind</h3>
-        <p>The EU AI Act is law. Colorado, California, and NYC have mandates active now. The regulatory infrastructure exists. The verification layer does not. Yet.</p>
-      </div>
-    </div>
-  </section>
- 
-  <hr class="full-divider" />
- 
-  <!-- HOW IT WORKS -->
-  <div class="how-section" id="solution">
-    <div class="how-inner">
-      <div class="section-label">The Solution</div>
-      <h2 class="section-title">The Vanguard Standard — Independent, Decentralized, Permanent</h2>
-      <p class="section-body">
-        OmnisightAI creates an immutable, publicly verifiable record of every AI model's fairness score, audit history, and compliance status — recorded permanently on the Ethereum blockchain. No human override. No hiding. The record lives forever.
-      </p>
- 
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <h3>Register</h3>
-          <p>AI models are registered on-chain with a unique fingerprint. Every version, every update — permanently recorded.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <h3>Audit</h3>
-          <p>Independent auditors evaluate AI models for bias across multiple fairness dimensions. No financial relationship with the audited company. No conflicts of interest.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <h3>Enforce</h3>
-          <p>Smart contracts automatically flag biased models and trigger compliance consequences. No single party can override the record.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <h3>Govern</h3>
-          <p>The DAIEC Council votes on appeals and policy. Every vote is permanent and on-chain — transparent to the world.</p>
-        </div>
-      </div>
-    </div>
-  </div>
- 
-  <!-- COUNCIL -->
-  <section id="council">
-    <div class="section-label">Governance</div>
-    <h2 class="section-title">The DAIEC Council</h2>
-    <p class="section-body">
-      The Decentralized AI Ethics and Compliance Council is the governing body of OmnisightAI. Composed of independent experts across AI ethics, law, blockchain, diversity, and compliance — it is the accountability layer that gives the Vanguard Standard its authority.
-    </p>
- 
-    <div class="council-card">
+
+  <!-- ══ HERO ══ -->
+  <header class="hero" id="top">
+    <div class="wrap hero-grid">
       <div>
-        <h3 class="council-title">A Council Built for the<br/><span>Moment That Matters</span></h3>
-        <p class="council-body">
-          Every council member is independent — no financial relationship with the companies being audited. Every vote is cast on-chain and visible to anyone. This is not governance on paper. It is governance by architecture.
+        <div class="label">Independent Verification Infrastructure</div>
+        <h1>Every organization says its AI is fair.<br/><em>Almost none can prove it.</em></h1>
+        <p class="hero-sub">
+          OmnisightAI is building the independent verification layer for AI accountability —
+          decentralized, tamper-evident, and governed by experts with no financial stake in
+          the systems they assess.
         </p>
-        <p class="council-body" style="margin-top:1rem;">
-          Founding council members are recognized as original architects of the DAIEC governance framework — a place in the history of AI accountability.
+        <div class="hero-cta">
+          <a href="#contact" class="btn btn-solid">Start a Conversation</a>
+          <a href="#standard" class="btn btn-ghost">What We Guarantee</a>
+        </div>
+      </div>
+
+      <!-- Honest build status. For council prospects and partners this is a
+           credibility asset, not a weakness — it shows nothing is overstated. -->
+      <aside class="status-panel">
+        <h4>Company Status</h4>
+        <div class="status-row">
+          <span class="status-k">OmnisightAI LLC</span>
+          <span class="status-v v-done">Formed</span>
+        </div>
+        <div class="status-row">
+          <span class="status-k">USPTO provisional application</span>
+          <span class="status-v v-done">Filed</span>
+        </div>
+        <div class="status-row">
+          <span class="status-k">Independent expert council</span>
+          <span class="status-v v-active">3 of 5 seated</span>
+        </div>
+        <div class="status-row">
+          <span class="status-k">Protocol — test environment</span>
+          <span class="status-v v-active">In development</span>
+        </div>
+        <div class="status-row">
+          <span class="status-k">Production network deployment</span>
+          <span class="status-v v-queued">Planned</span>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <!-- ══ THE GAP ══ -->
+  <section id="gap">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="label">The Gap</div>
+        <h2>Adoption went vertical. Verification never showed up.</h2>
+        <p>
+          The problem is no longer that organizations lack AI policies — most now have them.
+          The problem is that those policies are self-attested, and no independent party has
+          confirmed that any of them work.
         </p>
-        <a href="#contact" class="btn-primary" style="display:inline-block; margin-top:1.5rem;">Inquire About Council Membership</a>
       </div>
- 
-      <div class="council-seats">
-        <div class="seat">
-          <div class="seat-icon">🤝</div>
-          <div>
-            <div class="seat-name">D&I Advocate</div>
-          </div>
-          <span class="seat-status filled">Filled</span>
+
+      <div class="figures">
+        <div class="fig">
+          <div class="fig-num">88<small>%</small></div>
+          <div class="fig-desc">Organizational AI adoption across surveyed firms.</div>
+          <div class="fig-src">Stanford HAI · 2026 AI Index</div>
         </div>
-        <div class="seat">
-          <div class="seat-icon">🧠</div>
-          <div>
-            <div class="seat-name">AI Ethics Expert</div>
-          </div>
-          <span class="seat-status recruiting">Recruiting</span>
+        <div class="fig">
+          <div class="fig-num">58<small>→</small>40</div>
+          <div class="fig-desc">Foundation Model Transparency Index average, 2024 to 2025. Disclosure is moving backwards.</div>
+          <div class="fig-src">Stanford HAI · 2026 AI Index</div>
         </div>
-        <div class="seat">
-          <div class="seat-icon">⚖️</div>
-          <div>
-            <div class="seat-name">Legal & Regulatory Advisor</div>
-          </div>
-          <span class="seat-status recruiting">Recruiting</span>
+        <div class="fig">
+          <div class="fig-num">78<small>%</small></div>
+          <div class="fig-desc">Senior leaders who lack full confidence they could pass an independent AI governance audit within 90 days.</div>
+          <div class="fig-src">Grant Thornton · 2026 AI Impact Survey</div>
         </div>
-        <div class="seat">
-          <div class="seat-icon">⛓️</div>
-          <div>
-            <div class="seat-name">Blockchain Developer</div>
-          </div>
-          <span class="seat-status recruiting">Recruiting</span>
+        <div class="fig">
+          <div class="fig-num">362</div>
+          <div class="fig-desc">Documented AI incidents in 2025 — up 55% from 233 the prior year.</div>
+          <div class="fig-src">Stanford HAI · 2026 AI Index</div>
         </div>
-        <div class="seat">
-          <div class="seat-icon">📋</div>
-          <div>
-            <div class="seat-name">Corporate Compliance Officer</div>
-          </div>
-          <span class="seat-status recruiting">Recruiting</span>
+      </div>
+
+      <!-- The strongest single fact available: a real mandate exists, and the
+           regulator charged with enforcing it could not detect noncompliance. -->
+      <blockquote class="evidence">
+        <p>
+          New York City has required annual independent bias audits since 2023. When the
+          City's enforcement agency reviewed 32 companies, it identified one instance of
+          potential noncompliance. When the State Comptroller's auditors reviewed the same
+          organizations, they identified at least seventeen.
+        </p>
+        <cite>Office of the New York State Comptroller, Report 2024-N-6, December 2025</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ══ THE STANDARD ══ -->
+  <section class="band" id="standard">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="label">The Standard</div>
+        <h2>Four guarantees that self-attestation cannot make.</h2>
+        <p>
+          OmnisightAI is designing a verification standard around properties that hold
+          regardless of who is inconvenienced by the result — including us.
+        </p>
+      </div>
+
+      <div class="guarantees">
+        <div class="g-item">
+          <!-- Balance scale: separation of assessment from commercial interest -->
+          <svg class="g-ico" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+            <path d="M11 3.2v15.6M5.4 18.8h11.2M4 6.4h14"/>
+            <path d="M4 6.4 1.6 12.2h4.8L4 6.4ZM18 6.4l-2.4 5.8h4.8L18 6.4Z"/>
+            <circle cx="11" cy="3.2" r="1.1" fill="currentColor" stroke="none"/>
+          </svg>
+          <h3>Independence</h3>
+          <p>
+            Assessment is separated from commercial relationship. Those evaluating a system
+            hold no financial interest in the outcome — structurally, not as a policy anyone
+            promises to follow.
+          </p>
+        </div>
+
+        <div class="g-item">
+          <svg class="g-ico" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path d="M11 2.2 19.4 6 11 9.8 2.6 6l8.4-3.8Z"/>
+            <path d="M2.6 11 11 14.8 19.4 11M2.6 15.8 11 19.6l8.4-3.8"/>
+          </svg>
+          <h3>Permanence</h3>
+          <p>
+            A result, once issued, cannot be quietly revised or withdrawn. History is
+            tamper-evident — an unfavorable finding stays as legible in five years as it
+            was on the day it was recorded.
+          </p>
+        </div>
+
+        <div class="g-item">
+          <svg class="g-ico" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path d="M11 1.8 2.8 5.4v5.7c0 4.5 3.5 7.8 8.2 8.6 4.7-.8 8.2-4.1 8.2-8.6V5.4L11 1.8Z"/>
+            <path d="M7.7 10.9 10 13.3l4.4-4.7"/>
+          </svg>
+          <h3>Enforceability</h3>
+          <p>
+            Consequences follow findings by design rather than by negotiation. No party —
+            including the party being assessed, and including OmnisightAI — holds unilateral
+            authority to suppress a result.
+          </p>
+        </div>
+
+        <div class="g-item">
+          <svg class="g-ico" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <circle cx="11" cy="6.4" r="3"/>
+            <circle cx="4.6" cy="16" r="2.7"/>
+            <circle cx="17.4" cy="16" r="2.7"/>
+            <path d="M8.8 8.6 6.4 13.6M13.2 8.6l2.4 5M7.3 16h7.4"/>
+          </svg>
+          <h3>Accountable Governance</h3>
+          <p>
+            Standards, appeals, and policy sit with an independent expert council rather than
+            with company leadership. Decisions are recorded and independently verifiable
+            by anyone who cares to check.
+          </p>
+        </div>
+      </div>
+
+      <div class="nda-note">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <rect x="2.2" y="6.4" width="10.6" height="7.1" rx="1.2"/>
+          <path d="M4.6 6.4V4.5a2.9 2.9 0 0 1 5.8 0v1.9"/>
+        </svg>
+        <div>
+          Technical architecture, assessment methodology, and protocol design are the subject of
+          a filed provisional patent application and are not published.
+          They are shared with council candidates, prospective partners, and qualified investors
+          under mutual NDA. <a href="#contact">Request access →</a>
         </div>
       </div>
     </div>
   </section>
- 
-  <hr class="full-divider" />
- 
-  <!-- WHY NOW -->
-  <section id="why">
-    <div class="section-label">Why Now</div>
-    <h2 class="section-title">The Moment Has Arrived. The Infrastructure Doesn't Exist Yet.</h2>
- 
-    <div class="why-grid">
-      <div class="why-card">
-        <h3>Regulation Is Here</h3>
-        <p>The EU AI Act is in active enforcement. Colorado, California, and NYC have live mandates. 38 US states passed nearly 100 AI laws in 2025. The era of voluntary compliance is over.</p>
+
+  <!-- ══ REGULATORY LANDSCAPE ══ -->
+  <section id="landscape">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="label">Landscape</div>
+        <h2>The mandates are arriving on a published schedule.</h2>
+        <p>
+          Independent bias auditing is already law in one major market and phasing in across
+          several others. Every date below is legislated and public.
+        </p>
       </div>
-      <div class="why-card">
-        <h3>Liability Is Exploding</h3>
-        <p>Mobley v. Workday — the first federally certified AI discrimination class action — established that both AI vendors and employers carry liability. The legal reckoning has begun.</p>
+
+      <table class="reg-table">
+        <thead>
+          <tr>
+            <th>Jurisdiction</th>
+            <th>Requirement</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="reg-juris">New York City</td>
+            <td class="reg-req">Local Law 144 — annual <strong>independent bias audit</strong> required for automated employment decision tools</td>
+            <td class="reg-when"><span class="pill pill-live">In force · Jul 2023</span></td>
+          </tr>
+          <tr>
+            <td class="reg-juris">California</td>
+            <td class="reg-req">Civil Rights Council regulations governing automated-decision systems in employment under FEHA</td>
+            <td class="reg-when"><span class="pill pill-live">In force · Oct 2025</span></td>
+          </tr>
+          <tr>
+            <td class="reg-juris">European Union</td>
+            <td class="reg-req">AI Act Article 50 — transparency and synthetic-content disclosure obligations</td>
+            <td class="reg-when"><span class="pill pill-live">In force · Aug 2026</span></td>
+          </tr>
+          <tr>
+            <td class="reg-juris">Colorado</td>
+            <td class="reg-req">SB 26-189 — developer and deployer disclosure duties, three-year records, Attorney General enforcement</td>
+            <td class="reg-when"><span class="pill pill-soon">Effective Jan 2027</span></td>
+          </tr>
+          <tr>
+            <td class="reg-juris">European Union</td>
+            <td class="reg-req">AI Act — high-risk obligations for Annex III systems including employment, credit, and essential services</td>
+            <td class="reg-when"><span class="pill pill-soon">Effective Dec 2027</span></td>
+          </tr>
+          <tr>
+            <td class="reg-juris">European Union</td>
+            <td class="reg-req">AI Act — high-risk obligations for AI embedded in regulated products under Annex I</td>
+            <td class="reg-when"><span class="pill pill-soon">Effective Aug 2028</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <blockquote class="evidence" style="margin-top:3.25rem;">
+        <p>
+          Liability is no longer theoretical. In <em>Mobley v. Workday</em>, a federal court
+          preliminarily certified a nationwide collective under the Age Discrimination in
+          Employment Act covering applicants aged 40 and over who were screened through the
+          platform since 2020 — establishing that exposure can reach the technology vendor,
+          not only the employer.
+        </p>
+        <cite>N.D. Cal. · Collective preliminarily certified May 2025 · Notice period closed March 2026</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ══ COUNCIL ══ -->
+  <section class="band" id="council">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="label">Governance</div>
+        <h2>The Independent Council</h2>
+        <p>
+          Authority for a verification standard cannot rest with the company that operates it.
+          It rests with an independent council of recognized experts — no financial relationship
+          with the organizations under assessment.
+        </p>
       </div>
-      <div class="why-card">
-        <h3>The Market Is Ready</h3>
-        <p>Stanford's 2026 AI Index confirms 88% of organizations have zero AI accountability standard. The $105B RegTech market has no dominant AI compliance platform. First mover wins the standard.</p>
+
+      <div class="council-grid">
+        <div>
+          <p style="font-size:1.0625rem; color:var(--ink-soft); line-height:1.7;">
+            Three seats are held by nationally and internationally recognized practitioners in
+            their disciplines. Two remain open.
+          </p>
+          <p style="font-size:1.0625rem; color:var(--ink-soft); line-height:1.7; margin-top:1.125rem;">
+            Founding members shape the standard itself — the criteria, the thresholds, and the
+            appeals process — before any of it is fixed. That authorship is not available again
+            once the framework is set.
+          </p>
+          <a href="#contact" class="btn btn-solid" style="margin-top:1.75rem;">Inquire About a Seat</a>
+        </div>
+
+        <div class="seats">
+          <div class="seat">
+            <div>
+              <div class="seat-name">Diversity, Equity &amp; Inclusion</div>
+              <div class="seat-note">Fairness criteria and disparate impact</div>
+            </div>
+            <span class="seat-status"><span class="status-v v-done">Seated</span></span>
+          </div>
+          <div class="seat">
+            <div>
+              <div class="seat-name">Corporate Compliance</div>
+              <div class="seat-note">Enterprise controls and audit readiness</div>
+            </div>
+            <span class="seat-status"><span class="status-v v-done">Seated</span></span>
+          </div>
+          <div class="seat">
+            <div>
+              <div class="seat-name">AI Ethics</div>
+              <div class="seat-note">Assessment principles and harm frameworks</div>
+            </div>
+            <span class="seat-status"><span class="status-v v-done">Seated</span></span>
+          </div>
+          <div class="seat open">
+            <div>
+              <div class="seat-name">Legal &amp; Regulatory</div>
+              <div class="seat-note">Multi-jurisdiction compliance and liability</div>
+            </div>
+            <span class="seat-status"><span class="status-v v-active">Open</span></span>
+          </div>
+          <div class="seat open">
+            <div>
+              <div class="seat-name">Distributed Systems Engineering</div>
+              <div class="seat-note">Protocol architecture and production deployment</div>
+            </div>
+            <span class="seat-status"><span class="status-v v-active">Open</span></span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
- 
-  <!-- CONTACT -->
-  <section class="contact-section" id="contact">
-    <div class="contact-glow"></div>
-    <div class="section-label">Get In Touch</div>
-    <h2 class="section-title">Ready to Be Part of What's Being Built?</h2>
-    <p class="section-body">
-      Whether you are an investor, an enterprise leader, a government official, or a candidate for the DAIEC Council — the conversation starts here.
-    </p>
- 
-    <div class="contact-options">
-      <a href="mailto:kevin@omnisightai.ai?subject=OmnisightAI Inquiry" class="btn-primary">
-        📩 &nbsp; kevin@omnisightai.ai
-      </a>
-      <a href="mailto:kevin@omnisightai.ai?subject=DAIEC Council Inquiry" class="btn-secondary">
-        Council Membership Inquiry
-      </a>
+
+  <!-- ══ CONTACT ══ -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="label">Contact</div>
+        <h2>Start a conversation.</h2>
+        <p>
+          Detailed technical and commercial materials are provided under mutual NDA.
+          Tell us which conversation you are here for and we will respond directly.
+        </p>
+      </div>
+
+      <div class="contact-cols">
+
+        <!-- ── FORM ──
+             Posts to Formspree over AJAX so the visitor stays on this page.
+             If that request fails for any reason, the script falls back to the
+             visitor's mail client with the message pre-filled and prints the
+             address on screen. It never fails silently. -->
+        <form id="contactForm" action="https://formspree.io/f/xppaokbj" method="POST" novalidate>
+
+          <!-- Honeypot. Real people never see this; bots fill everything.
+               Formspree silently discards any submission where _gotcha is set. -->
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"
+                 aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" />
+
+          <div class="field">
+            <label for="cf-name">Name</label>
+            <input type="text" id="cf-name" name="name" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="cf-email">Email</label>
+            <input type="email" id="cf-email" name="email" required autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="cf-org">Organization</label>
+            <input type="text" id="cf-org" name="organization" autocomplete="organization" />
+          </div>
+          <div class="field">
+            <label for="cf-topic">Reason for contact</label>
+            <select id="cf-topic" name="topic">
+              <option value="Council Membership Inquiry">Council membership</option>
+              <option value="Partnership Inquiry">Partnership or design partner</option>
+              <option value="Investor Inquiry - NDA Request">Investment / NDA request</option>
+              <option value="General Inquiry">Something else</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cf-msg">Message</label>
+            <textarea id="cf-msg" name="message" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-solid" style="width:100%;">Send Message</button>
+          <p class="form-note">
+            Detailed technical and commercial materials are released under mutual NDA.
+            We respond to every inquiry directly.
+          </p>
+          <div class="form-msg" id="formMsg" role="status" aria-live="polite"></div>
+        </form>
+
+        <!-- ── DIRECT ── Always works, with or without a mail client. -->
+        <aside>
+          <div class="direct">
+            <h4>Direct</h4>
+            <div class="email-row">
+              <a class="email-addr" id="directEmail" href="mailto:kevin@omnisightai.ai">kevin@omnisightai.ai</a>
+              <button type="button" class="copy-btn" id="copyEmail" aria-label="Copy email address">Copy</button>
+            </div>
+
+            <div class="routes">
+              <div class="route">
+                <strong>Council candidates</strong>
+                <span>Two seats remain open. Founding members define the standard before it is fixed.</span>
+              </div>
+              <div class="route">
+                <strong>Partners &amp; enterprise</strong>
+                <span>Design partners shape the assessment criteria their own industry will be measured against.</span>
+              </div>
+              <div class="route">
+                <strong>Investors</strong>
+                <span>Architecture, methodology, and commercial model provided under mutual NDA.</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+      </div>
     </div>
   </section>
- 
-  <!-- FOOTER -->
+
+  <!-- ══ FOOTER ══ -->
   <footer>
-    <div class="footer-logo">Omnisight<span>AI</span></div>
-    <div class="footer-meta">
-      OmnisightAI LLC &nbsp;·&nbsp; Las Vegas, Nevada &nbsp;·&nbsp; USPTO Patent Pending &nbsp;·&nbsp; Live on Ethereum Blockchain<br/>
-      © 2026 OmnisightAI LLC. All Rights Reserved. &nbsp;·&nbsp; Source: Stanford 2026 AI Index
-    </div>
-    <div class="footer-links">
-      <a href="mailto:kevin@omnisightai.ai">Contact</a>
-      <a href="mailto:kevin@omnisightai.ai?subject=NDA Request">NDA Request</a>
+    <div class="wrap">
+      <div class="foot-top">
+        <div>
+          <a href="#top" class="brand" style="margin-bottom:1rem;">
+            <svg width="22" height="22" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+              <circle cx="13" cy="13" r="12" stroke="#101A28" stroke-width="1.5"/>
+              <circle cx="13" cy="13" r="4.25" fill="#14503C"/>
+              <path d="M13 1v6M13 19v6M1 13h6M19 13h6" stroke="#101A28" stroke-width="1.5"/>
+            </svg>
+            <span class="brand-name" style="font-size:1rem;">OmnisightAI</span>
+          </a>
+          <p class="foot-legal">
+            OmnisightAI LLC · Nevada, USA · USPTO provisional patent application filed.<br/>
+            Forward-looking statements describe development plans and do not represent
+            currently available capabilities.
+          </p>
+        </div>
+        <div class="foot-links">
+          <a href="#contact">Contact</a>
+          <a href="#council">Council</a>
+          <a href="mailto:kevin@omnisightai.ai" class="email-addr" style="font-size:0.8125rem;border-bottom:none;">kevin@omnisightai.ai</a>
+        </div>
+      </div>
+
+      <!-- Every figure on this page is individually sourced. Compliance buyers
+           and investors check footnotes; a blanket citation reads as sloppy. -->
+      <div class="sources">
+        <strong>Sources</strong>
+        Stanford HAI, 2026 AI Index Report — Responsible AI chapter (adoption, transparency index, incident counts)<br/>
+        Grant Thornton, 2026 AI Impact Survey, ~1,000 senior US business leaders (governance audit confidence)<br/>
+        Office of the New York State Comptroller, Report 2024-N-6, December 2025 (Local Law 144 enforcement)<br/>
+        NYC Local Law 144 · California Civil Rights Council ADS regulations · EU Regulation 2024/1689 as amended · Colorado SB 26-189<br/>
+        Mobley v. Workday, Inc., No. 3:23-cv-00770 (N.D. Cal.)<br/>
+        © 2026 OmnisightAI LLC. All rights reserved.
+      </div>
     </div>
   </footer>
- 
+
+  <script>
+  /* ═══════════════════════════════════════════════════════════════
+     CONTACT BEHAVIOUR
+     Two jobs, both about never losing an inbound lead:
+       1. Copy-to-clipboard on the address, with a fallback for
+          browsers that block the modern clipboard API.
+       2. Form submission that degrades to a pre-filled mail client
+          if the POST fails — and always prints the address on screen
+          as a last resort.
+     ═══════════════════════════════════════════════════════════════ */
+  (function () {
+    'use strict';
+
+    var EMAIL = 'kevin@omnisightai.ai';   // ← single place to change the address
+
+    /* ── 1. COPY TO CLIPBOARD ────────────────────────────────── */
+    var copyBtn = document.getElementById('copyEmail');
+
+    function fallbackCopy(text) {
+      // navigator.clipboard requires a secure context (https).
+      // This path covers local files and any non-https preview.
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    function flash(btn, label) {
+      var original = 'Copy';
+      btn.textContent = label;
+      btn.classList.add('done');
+      setTimeout(function () {
+        btn.textContent = original;
+        btn.classList.remove('done');
+      }, 2000);
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(EMAIL).then(
+            function () { flash(copyBtn, 'Copied'); },
+            function () { flash(copyBtn, fallbackCopy(EMAIL) ? 'Copied' : 'Select it'); }
+          );
+        } else {
+          flash(copyBtn, fallbackCopy(EMAIL) ? 'Copied' : 'Select it');
+        }
+      });
+    }
+
+    /* ── 2. FORM SUBMISSION ──────────────────────────────────── */
+    var form   = document.getElementById('contactForm');
+    var msg    = document.getElementById('formMsg');
+    var submit = form ? form.querySelector('button[type=submit]') : null;
+
+    function show(html, isError) {
+      msg.innerHTML = html;
+      msg.classList.add('show');
+      // Error state reuses the ochre "pending" colour rather than shouting in red.
+      msg.style.background   = isError ? 'var(--pending-lt)' : 'var(--accent-lt)';
+      msg.style.color        = isError ? 'var(--pending)'    : 'var(--accent)';
+      msg.style.borderColor  = isError ? 'rgba(138,106,31,0.25)' : 'rgba(20,80,60,0.22)';
+    }
+
+    function readForm() {
+      return {
+        name:  (form.querySelector('#cf-name').value  || '').trim(),
+        email: (form.querySelector('#cf-email').value || '').trim(),
+        org:   (form.querySelector('#cf-org').value   || '').trim(),
+        topic: form.querySelector('#cf-topic').value,
+        body:  (form.querySelector('#cf-msg').value   || '').trim()
+      };
+    }
+
+    // Last-resort path: hand the message to the visitor's mail client AND
+    // print the address, so a failed POST never costs an inbound lead.
+    function mailFallback(d) {
+      var lines = [
+        'Name: '         + d.name,
+        'Email: '        + d.email,
+        'Organization: ' + (d.org || '-'),
+        '',
+        d.body
+      ].join('\n');
+
+      window.location.href = 'mailto:' + EMAIL
+        + '?subject=' + encodeURIComponent('OmnisightAI - ' + d.topic)
+        + '&body='    + encodeURIComponent(lines);
+
+      show(
+        'We could not reach the form service. Your email client should open — ' +
+        'if it does not, send this to <a href="mailto:' + EMAIL + '">' + EMAIL + '</a> directly.',
+        true
+      );
+    }
+
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();                 // always handle this ourselves
+        var d = readForm();
+
+        if (!d.name || !d.email || !d.body) {
+          show('Please add your name, email, and a short message.', true);
+          return;
+        }
+        // Deliberately permissive email check — just enough to catch typos.
+        if (!/^\S+@\S+\.\S+$/.test(d.email)) {
+          show('That email address looks incomplete. Please check it.', true);
+          return;
+        }
+
+        submit.disabled = true;             // prevents double submission
+        submit.textContent = 'Sending…';
+
+        var payload = new FormData(form);
+        // _subject controls the subject line that lands in the inbox.
+        payload.append('_subject', 'OmnisightAI website - ' + d.topic);
+        // _replyto lets you hit reply and answer the sender directly.
+        payload.append('_replyto', d.email);
+
+        fetch(form.action, {
+          method: 'POST',
+          body: payload,
+          headers: { 'Accept': 'application/json' }   // ask for JSON, not a redirect
+        })
+        .then(function (res) {
+          if (res.ok) {
+            form.reset();
+            show('Message sent. We respond to every inquiry directly — expect a reply shortly.');
+            submit.textContent = 'Sent';
+          } else {
+            // Endpoint reachable but rejected the submission (quota, config, spam).
+            return res.json().then(function (j) {
+              var detail = (j && j.errors && j.errors[0] && j.errors[0].message) || '';
+              show(
+                'The form service rejected this submission' + (detail ? ' (' + detail + ')' : '') +
+                '. Please email <a href="mailto:' + EMAIL + '">' + EMAIL + '</a> directly.',
+                true
+              );
+              submit.disabled = false;
+              submit.textContent = 'Send Message';
+            });
+          }
+        })
+        .catch(function () {
+          // Network failure, offline, blocked request.
+          mailFallback(d);
+          submit.disabled = false;
+          submit.textContent = 'Send Message';
+        });
+      });
+    }
+  })();
+  </script>
+
 </body>
 </html>
