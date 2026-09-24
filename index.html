@@ -13,36 +13,23 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!--
-    Type system — three faces, each with a job:
-      Newsreader (serif)     -> headlines. Reads institutional/editorial, not startup.
-      Inter (sans)           -> body copy. Neutral, highly legible.
-      JetBrains Mono (mono)  -> labels, data, status. Reads like an audit document.
-  -->
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* ── PALETTE ──────────────────────────────────────────────
-         Deliberate move away from dark-navy + cyan glow.
-         That palette reads "crypto project" to a compliance officer,
-         which is the exact wrong signal for a trust brand.
-         This reads: audit firm, standards body, research institute.
-      ────────────────────────────────────────────────────────── */
-      --paper:      #FAF9F7;   /* warm off-white page */
-      --paper-alt:  #F2F0EC;   /* banded sections */
-      --ink:        #101A28;   /* near-black navy — primary text */
-      --ink-soft:   #55606E;   /* secondary text */
-      --ink-faint:  #8A929C;   /* captions, footnotes */
-      --rule:       #E3E0DA;   /* hairlines */
+      --paper:      #FAF9F7;
+      --paper-alt:  #F2F0EC;
+      --ink:        #101A28;
+      --ink-soft:   #55606E;
+      --ink-faint:  #8A929C;
+      --rule:       #E3E0DA;
       --rule-dark:  #C9C5BD;
-      --accent:     #14503C;   /* deep verification green — the one accent */
+      --accent:     #14503C;
       --accent-lt:  #E8EFEA;
-      --pending:    #8A6A1F;   /* muted ochre for in-progress states */
+      --pending:    #8A6A1F;
       --pending-lt: #F5EFE0;
-
       --maxw: 1140px;
     }
 
@@ -58,7 +45,6 @@
       overflow-x: hidden;
     }
 
-    /* ── SHARED TYPE UTILITIES ── */
     .label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.6875rem;
@@ -72,7 +58,7 @@
 
     .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 2.5rem; }
 
-    /* ── NAV ─────────────────────────────────────────────── */
+    /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 100;
       background: rgba(250,249,247,0.92);
@@ -100,7 +86,7 @@
     }
     .nav-btn:hover { background: var(--ink); color: var(--paper) !important; }
 
-    /* ── HERO ────────────────────────────────────────────── */
+    /* ── HERO ── */
     .hero { padding: 7rem 0 4.5rem; border-bottom: 1px solid var(--rule); }
     .hero-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 5rem; align-items: start; }
 
@@ -127,9 +113,6 @@
     .btn-ghost { border-color: var(--rule-dark); color: var(--ink); }
     .btn-ghost:hover { border-color: var(--ink); background: rgba(16,26,40,0.03); }
 
-    /* Status panel — honesty as a trust asset.
-       Telling a council prospect exactly where the company stands
-       reads as competence. Overstating reads as risk. */
     .status-panel {
       border: 1px solid var(--rule); background: #fff; border-radius: 3px; padding: 1.5rem 1.625rem;
     }
@@ -162,7 +145,7 @@
     }
     .sec-head p { font-size: 1.0625rem; color: var(--ink-soft); margin-top: 1.125rem; line-height: 1.7; }
 
-    /* ── THE GAP: DATA FIGURES ── */
+    /* ── THE GAP ── */
     .figures {
       display: grid; grid-template-columns: repeat(4, 1fr);
       border-top: 1px solid var(--rule-dark); margin-top: 3.5rem;
@@ -181,7 +164,6 @@
       color: var(--ink-faint); margin-top: 0.75rem; text-transform: uppercase;
     }
 
-    /* Pull-quote / evidence callout — the single most persuasive fact on the page */
     .evidence {
       margin-top: 4rem; border-left: 2px solid var(--accent);
       padding: 0.25rem 0 0.25rem 2rem; max-width: 46rem;
@@ -195,10 +177,7 @@
       margin-top: 1rem; text-transform: uppercase;
     }
 
-    /* ── GUARANTEES (replaces the old "How It Works" process diagram) ──
-       Deliberate IP decision: this section states PROPERTIES of the
-       standard, not the MECHANISM that produces them. Mechanism is
-       covered by the provisional filing and stays off the public page. */
+    /* ── STANDARD ── */
     .guarantees { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 3.5rem; border-top: 1px solid var(--rule-dark); }
     .g-item { padding: 2.25rem 2.5rem 2.25rem 0; border-bottom: 1px solid var(--rule); }
     .g-item:nth-child(even) { padding-left: 2.5rem; border-left: 1px solid var(--rule); }
@@ -246,11 +225,7 @@
     .seat-status { margin-left: auto; }
     .seat.open { background: linear-gradient(90deg, var(--pending-lt), transparent 65%); padding-left: 0.875rem; margin-left: -0.875rem; }
 
-    /* ── CONTACT: real form + always-visible direct address ──
-       Design rule: never make a mailto link the ONLY path to contact you.
-       mailto does nothing for anyone reading in an embedded preview, or
-       using webmail with no desktop client registered. The address is
-       therefore printed as selectable text and backed by a copy button. */
+    /* ── CONTACT ── */
     .contact-cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 4rem; margin-top: 3rem; align-items: start; }
 
     .field { margin-bottom: 1.125rem; }
@@ -317,7 +292,91 @@
     }
     .sources strong { color: var(--ink-soft); font-weight: 500; display: block; margin-bottom: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; }
 
-    /* ── RESPONSIVE ───────────────────────────────────────── */
+    /* ══ WHITE PAPER SECTION — new addition ══════════════════════
+       Sits between Landscape and Council. Matches the existing
+       design language exactly: same border treatment, same type
+       scale, same spacing rhythm. No new visual language introduced.
+    ═══════════════════════════════════════════════════════════════ */
+    .wp-grid {
+      display: grid;
+      grid-template-columns: 1fr 2.4fr;
+      gap: 4rem;
+      margin-top: 3rem;
+      align-items: start;
+    }
+    .wp-meta { position: sticky; top: 88px; }
+    .wp-meta h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .wp-meta p {
+      font-size: 0.9375rem;
+      color: var(--ink-soft);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .wp-actions { display: flex; flex-direction: column; gap: 0.625rem; }
+    .wp-actions .btn { text-align: center; }
+    .wp-detail {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-top: 1.25rem;
+      line-height: 1.9;
+    }
+    .wp-viewer {
+      border: 1px solid var(--rule);
+      background: #fff;
+    }
+    .wp-viewer embed {
+      display: block;
+      width: 100%;
+      height: 720px;
+      border: none;
+    }
+    /* Fallback shown only when browser blocks embed */
+    .wp-fallback {
+      display: none;
+      padding: 3rem 2rem;
+      text-align: center;
+      font-size: 0.9375rem;
+      color: var(--ink-soft);
+      line-height: 1.7;
+      border: 1px solid var(--rule);
+      background: #fff;
+    }
+    .wp-viewer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-top: 1px solid var(--rule);
+      background: var(--paper-alt);
+    }
+    .wp-viewer-bar span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .wp-viewer-bar a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.625rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .wp-viewer-bar a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 940px) {
       .wrap, .nav-inner { padding: 0 1.5rem; }
       .nav-links li:not(:last-child) { display: none; }
@@ -334,6 +393,10 @@
       .g-item:nth-last-child(2) { border-bottom: 1px solid var(--rule); }
       .council-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .contact-cols { grid-template-columns: 1fr; gap: 2.5rem; }
+      .wp-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .wp-meta { position: static; }
+      .wp-actions { flex-direction: row; }
+      .wp-viewer embed { height: 500px; }
     }
 
     @media (max-width: 600px) {
@@ -348,7 +411,6 @@
       .fig-num { font-size: 2.5rem; }
       .evidence { padding-left: 1.25rem; margin-top: 2.5rem; }
       .evidence p { font-size: 1.125rem; }
-      /* Regulatory table collapses to stacked cards on phones */
       .reg-table thead { display: none; }
       .reg-table, .reg-table tbody, .reg-table tr, .reg-table td { display: block; width: 100%; }
       .reg-table tr { padding: 1.25rem 0; border-bottom: 1px solid var(--rule); }
@@ -356,6 +418,8 @@
       .reg-juris { width: auto; }
       .foot-top { flex-direction: column; gap: 1.5rem; }
       .foot-links { flex-wrap: wrap; gap: 1.25rem; }
+      .wp-actions { flex-direction: column; }
+      .wp-viewer embed { height: 420px; }
     }
   </style>
 </head>
@@ -365,7 +429,6 @@
   <nav>
     <div class="nav-inner">
       <a href="#top" class="brand">
-        <!-- Logomark: an aperture/seal. Geometric, no gradients — reads institutional. -->
         <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
           <circle cx="13" cy="13" r="12" stroke="#101A28" stroke-width="1.5"/>
           <circle cx="13" cy="13" r="4.25" fill="#14503C"/>
@@ -377,6 +440,7 @@
         <li><a href="#gap">The Gap</a></li>
         <li><a href="#standard">The Standard</a></li>
         <li><a href="#landscape">Landscape</a></li>
+        <li><a href="#whitepaper">White Paper</a></li>
         <li><a href="#council">Council</a></li>
         <li><a href="#contact" class="nav-btn">Contact</a></li>
       </ul>
@@ -400,8 +464,6 @@
         </div>
       </div>
 
-      <!-- Honest build status. For council prospects and partners this is a
-           credibility asset, not a weakness — it shows nothing is overstated. -->
       <aside class="status-panel">
         <h4>Company Status</h4>
         <div class="status-row">
@@ -464,8 +526,6 @@
         </div>
       </div>
 
-      <!-- The strongest single fact available: a real mandate exists, and the
-           regulator charged with enforcing it could not detect noncompliance. -->
       <blockquote class="evidence">
         <p>
           New York City has required annual independent bias audits since 2023. When the
@@ -492,7 +552,6 @@
 
       <div class="guarantees">
         <div class="g-item">
-          <!-- Balance scale: separation of assessment from commercial interest -->
           <svg class="g-ico" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
             <path d="M11 3.2v15.6M5.4 18.8h11.2M4 6.4h14"/>
             <path d="M4 6.4 1.6 12.2h4.8L4 6.4ZM18 6.4l-2.4 5.8h4.8L18 6.4Z"/>
@@ -630,8 +689,70 @@
     </div>
   </section>
 
+  <!-- ══ WHITE PAPER ══ — NEW SECTION -->
+  <section class="band" id="whitepaper">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="label">White Paper</div>
+        <h2>The Vanguard Standard</h2>
+        <p>
+          The full case for why independent AI accountability infrastructure is the only
+          standard that survives the forces already working to dismantle it.
+        </p>
+      </div>
+
+      <div class="wp-grid">
+
+        <!-- Sticky sidebar: meta + actions -->
+        <aside class="wp-meta">
+          <h3>The Vanguard Standard</h3>
+          <p>
+            A white paper on decentralized AI accountability infrastructure. The legal exposure,
+            the regulatory timeline, the playbook used to repeal the nation's first AI law in 90 days,
+            and the architecture built to outlast it.
+          </p>
+          <div class="wp-actions">
+            <a href="vanguard-standard-whitepaper.pdf" download class="btn btn-solid">Download PDF</a>
+            <a href="vanguard-standard-whitepaper.pdf" target="_blank" rel="noopener" class="btn btn-ghost">Open full screen</a>
+          </div>
+          <div class="wp-detail">
+            Author &nbsp;·&nbsp; Kevin White<br/>
+            Publisher &nbsp;·&nbsp; OmnisightAI LLC<br/>
+            Year &nbsp;·&nbsp; 2026<br/>
+            Format &nbsp;·&nbsp; PDF
+          </div>
+        </aside>
+
+        <!-- Embedded viewer -->
+        <div>
+          <div class="wp-viewer" id="wpViewer">
+            <embed
+              src="vanguard-standard-whitepaper.pdf#toolbar=1&navpanes=0&scrollbar=1"
+              type="application/pdf"
+              title="The Vanguard Standard — OmnisightAI White Paper"
+              aria-label="Embedded PDF: The Vanguard Standard white paper"
+            />
+            <div class="wp-viewer-bar">
+              <span>The Vanguard Standard &nbsp;·&nbsp; OmnisightAI LLC &nbsp;·&nbsp; 2026</span>
+              <a href="vanguard-standard-whitepaper.pdf" download>Download ↓</a>
+            </div>
+          </div>
+
+          <!-- Shown by JS if embed fails -->
+          <div class="wp-fallback" id="wpFallback">
+            <p style="margin-bottom:1rem;">Your browser does not display inline PDFs.</p>
+            <a href="vanguard-standard-whitepaper.pdf" download class="btn btn-solid">Download the white paper</a>
+            &nbsp;
+            <a href="vanguard-standard-whitepaper.pdf" target="_blank" rel="noopener" class="btn btn-ghost">Open in new tab</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ══ COUNCIL ══ -->
-  <section class="band" id="council">
+  <section id="council">
     <div class="wrap">
       <div class="sec-head">
         <div class="label">Governance</div>
@@ -711,19 +832,9 @@
       </div>
 
       <div class="contact-cols">
-
-        <!-- ── FORM ──
-             Posts to Formspree over AJAX so the visitor stays on this page.
-             If that request fails for any reason, the script falls back to the
-             visitor's mail client with the message pre-filled and prints the
-             address on screen. It never fails silently. -->
         <form id="contactForm" action="https://formspree.io/f/xppaokbj" method="POST" novalidate>
-
-          <!-- Honeypot. Real people never see this; bots fill everything.
-               Formspree silently discards any submission where _gotcha is set. -->
           <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"
                  aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" />
-
           <div class="field">
             <label for="cf-name">Name</label>
             <input type="text" id="cf-name" name="name" required autocomplete="name" />
@@ -757,7 +868,6 @@
           <div class="form-msg" id="formMsg" role="status" aria-live="polite"></div>
         </form>
 
-        <!-- ── DIRECT ── Always works, with or without a mail client. -->
         <aside>
           <div class="direct">
             <h4>Direct</h4>
@@ -765,7 +875,6 @@
               <a class="email-addr" id="directEmail" href="mailto:kevin@omnisightai.ai">kevin@omnisightai.ai</a>
               <button type="button" class="copy-btn" id="copyEmail" aria-label="Copy email address">Copy</button>
             </div>
-
             <div class="routes">
               <div class="route">
                 <strong>Council candidates</strong>
@@ -782,7 +891,6 @@
             </div>
           </div>
         </aside>
-
       </div>
     </div>
   </section>
@@ -807,14 +915,13 @@
           </p>
         </div>
         <div class="foot-links">
+          <a href="#whitepaper">White Paper</a>
           <a href="#contact">Contact</a>
           <a href="#council">Council</a>
           <a href="mailto:kevin@omnisightai.ai" class="email-addr" style="font-size:0.8125rem;border-bottom:none;">kevin@omnisightai.ai</a>
         </div>
       </div>
 
-      <!-- Every figure on this page is individually sourced. Compliance buyers
-           and investors check footnotes; a blanket citation reads as sloppy. -->
       <div class="sources">
         <strong>Sources</strong>
         Stanford HAI, 2026 AI Index Report — Responsible AI chapter (adoption, transparency index, incident counts)<br/>
@@ -828,26 +935,34 @@
   </footer>
 
   <script>
-  /* ═══════════════════════════════════════════════════════════════
-     CONTACT BEHAVIOUR
-     Two jobs, both about never losing an inbound lead:
-       1. Copy-to-clipboard on the address, with a fallback for
-          browsers that block the modern clipboard API.
-       2. Form submission that degrades to a pre-filled mail client
-          if the POST fails — and always prints the address on screen
-          as a last resort.
-     ═══════════════════════════════════════════════════════════════ */
   (function () {
     'use strict';
 
-    var EMAIL = 'kevin@omnisightai.ai';   // ← single place to change the address
+    var EMAIL = 'kevin@omnisightai.ai';
 
-    /* ── 1. COPY TO CLIPBOARD ────────────────────────────────── */
+    /* ── PDF embed fallback ─────────────────────────────────
+       Safari on iOS and some corporate browsers block inline
+       PDFs. If the embed has no height after a short delay,
+       swap it for the fallback download block.                */
+    (function () {
+      var viewer  = document.getElementById('wpViewer');
+      var fallback = document.getElementById('wpFallback');
+      if (!viewer || !fallback) return;
+      setTimeout(function () {
+        var em = viewer.querySelector('embed');
+        if (!em) return;
+        // clientHeight of 0 means the embed didn't render
+        if (em.clientHeight < 10) {
+          viewer.style.display  = 'none';
+          fallback.style.display = 'block';
+        }
+      }, 1800);
+    })();
+
+    /* ── Copy to clipboard ── */
     var copyBtn = document.getElementById('copyEmail');
 
     function fallbackCopy(text) {
-      // navigator.clipboard requires a secure context (https).
-      // This path covers local files and any non-https preview.
       var ta = document.createElement('textarea');
       ta.value = text;
       ta.setAttribute('readonly', '');
@@ -884,7 +999,7 @@
       });
     }
 
-    /* ── 2. FORM SUBMISSION ──────────────────────────────────── */
+    /* ── Form submission ── */
     var form   = document.getElementById('contactForm');
     var msg    = document.getElementById('formMsg');
     var submit = form ? form.querySelector('button[type=submit]') : null;
@@ -892,7 +1007,6 @@
     function show(html, isError) {
       msg.innerHTML = html;
       msg.classList.add('show');
-      // Error state reuses the ochre "pending" colour rather than shouting in red.
       msg.style.background   = isError ? 'var(--pending-lt)' : 'var(--accent-lt)';
       msg.style.color        = isError ? 'var(--pending)'    : 'var(--accent)';
       msg.style.borderColor  = isError ? 'rgba(138,106,31,0.25)' : 'rgba(20,80,60,0.22)';
@@ -908,8 +1022,6 @@
       };
     }
 
-    // Last-resort path: hand the message to the visitor's mail client AND
-    // print the address, so a failed POST never costs an inbound lead.
     function mailFallback(d) {
       var lines = [
         'Name: '         + d.name,
@@ -918,11 +1030,9 @@
         '',
         d.body
       ].join('\n');
-
       window.location.href = 'mailto:' + EMAIL
         + '?subject=' + encodeURIComponent('OmnisightAI - ' + d.topic)
         + '&body='    + encodeURIComponent(lines);
-
       show(
         'We could not reach the form service. Your email client should open — ' +
         'if it does not, send this to <a href="mailto:' + EMAIL + '">' + EMAIL + '</a> directly.',
@@ -932,32 +1042,25 @@
 
     if (form) {
       form.addEventListener('submit', function (e) {
-        e.preventDefault();                 // always handle this ourselves
+        e.preventDefault();
         var d = readForm();
-
         if (!d.name || !d.email || !d.body) {
           show('Please add your name, email, and a short message.', true);
           return;
         }
-        // Deliberately permissive email check — just enough to catch typos.
         if (!/^\S+@\S+\.\S+$/.test(d.email)) {
           show('That email address looks incomplete. Please check it.', true);
           return;
         }
-
-        submit.disabled = true;             // prevents double submission
+        submit.disabled = true;
         submit.textContent = 'Sending…';
-
         var payload = new FormData(form);
-        // _subject controls the subject line that lands in the inbox.
         payload.append('_subject', 'OmnisightAI website - ' + d.topic);
-        // _replyto lets you hit reply and answer the sender directly.
         payload.append('_replyto', d.email);
-
         fetch(form.action, {
           method: 'POST',
           body: payload,
-          headers: { 'Accept': 'application/json' }   // ask for JSON, not a redirect
+          headers: { 'Accept': 'application/json' }
         })
         .then(function (res) {
           if (res.ok) {
@@ -965,7 +1068,6 @@
             show('Message sent. We respond to every inquiry directly — expect a reply shortly.');
             submit.textContent = 'Sent';
           } else {
-            // Endpoint reachable but rejected the submission (quota, config, spam).
             return res.json().then(function (j) {
               var detail = (j && j.errors && j.errors[0] && j.errors[0].message) || '';
               show(
@@ -979,7 +1081,6 @@
           }
         })
         .catch(function () {
-          // Network failure, offline, blocked request.
           mailFallback(d);
           submit.disabled = false;
           submit.textContent = 'Send Message';
